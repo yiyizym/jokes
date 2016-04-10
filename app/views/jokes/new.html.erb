@@ -1,0 +1,78 @@
+<%= form_for :joke, url: jokes_path(@joke), method: :post do |f| %>
+  <div class="new_joke_container row">
+    <div class="col-xs-12 row">
+      <span class="col-xs-2">content:</span>
+      <div class="col-xs-9"> <%= f.text_area :content, rows: 10, cols: 75 %></div>
+    </div>
+    <div class="col-xs-12 row">
+      <span class="col-xs-2">point:</span>
+      <div class="col-xs-9"> <%= f.number_field :point, in: 1...10 %></div>
+    </div>
+    <div class="col-xs-12 row">
+      <span class="col-xs-2">tags:</span>
+      <div class="col-xs-8 tags_container"> <%= f.collection_check_boxes :tag_ids, Tag.all, :id, :content %></div>
+      <span  class="col-xs-1">
+        <button type="button" class="btn btn-primary add_tag">add tag</button>
+      </span>
+    </div>
+    <div class="col-xs-12">
+      <%= f.submit "submit", class: "btn btn-primary"%>
+    </div>
+  </div>
+<% end %>
+<script>
+  $(function(){
+    $(".add_tag").on("click", function(){
+      BootstrapDialog.show({
+        title: 'add tag',
+        message: '<input type="text" class="new_tag" />',
+        buttons: [{
+            label: 'cancle',
+            cssClass: 'btn btn-default',
+            action: function(dialog) {
+              dialog.close();
+            }
+        }, {
+            label: 'confirm',
+            cssClass: 'btn btn-primary',
+            action: function(dialog) {
+              $.ajax({
+                url: "/tags",
+                type: "POST",
+                dataType: "json",
+                data: {
+                  content: $(".new_tag").val()
+                },
+                success: function(resp){
+                  if (resp.return_code === 0) {
+                    var tag_id = resp.id;
+                    var tag_content = resp.content;
+                    var tpl = [
+                      '<input type="checkbox" value="',
+                      tag_id,
+                      '" name="joke[tag_ids][]" id="joke_tag_ids_',
+                      tag_id,
+                      '"><label for="joke_tag_ids_',
+                      tag_id,
+                      '">',
+                      tag_content,
+                      '</label>'
+                    ].join("");
+                    $(".tags_container").prepend(tpl);
+                    dialog.close();
+                    // location.reload();
+                  } else{
+                    console.error("create new tag fail!");
+                  }
+                },
+                error: function(){
+                  console.error("create new tag fail!");
+                }
+              });
+            }
+        }]
+      });
+    });
+
+  });
+</script>

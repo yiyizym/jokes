@@ -1,0 +1,13 @@
+<%= form_for @joke do |f| %>
+  <div class="row">
+    <div class="col-xs-12 row">
+      <span class="col-xs-3">content:</span><span class="col-xs-9"> <%= f.text_area :content, rows: 10, cols: 45 %></span>
+    </div>
+    <div class="col-xs-12 row">
+      <span class="col-xs-3">point:</span><span class="col-xs-9"> <%= f.number_field :point, in: 1...10 %></span>
+    </div>
+    <div class="col-xs-12 row">
+      <span class="col-xs-3">tags:</span><span class="col-xs-8"> <%= f.collection_check_boxes :tag_ids, Tag.all, :id, :content %></span><span  class="col-xs-1"></span>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,112 @@
+<form class="search_form">
+  <label for="content">内容：</label><input type="text" name="content">
+  <button type="button" class="btn btn-primary search">search</button>
+</form>
+
+<div class="paginate_table">
+  <%= render "paginate_table", jokes: @jokes %>
+</div>
+
+<script>
+  $(function(){
+    $(".paginate_table").on("click", ".edit_joke_btn", function(event){
+      var joke_id = $(event.currentTarget).closest('tr').data('joke-id');
+      BootstrapDialog.show({
+        title: 'edit joke',
+        message: $('<div>').load('/jokes/'+ joke_id +'/edit'),
+        buttons: [{
+            label: 'cancle',
+            cssClass: 'btn btn-default',
+            action: function(dialog) {
+              dialog.close();
+            }
+        }, {
+            label: 'confirm',
+            cssClass: 'btn btn-primary',
+            action: function(dialog) {
+              $.ajax({
+                url: "/jokes/" + joke_id,
+                type: "PUT",
+                dataType: "json",
+                data: {
+                  content: $("#joke_content").val(),
+                  point: $("#joke_point").val(),
+                  tag_ids: $(".edit_joke input:checkbox:checked").map(function(){return $(this).val();}).get()
+                },
+                success: function(resp){
+                  if (resp.return_code === 0) {
+                    location.reload();
+                  } else{
+                    console.error("update joke fail!");
+                  }
+                },
+                error: function(){
+                  console.error("update joke fail!");
+                }
+              });
+            }
+        }]
+      });
+    });
+    
+    $(".paginate_table").on("click", ".delete_joke_btn", function(event){
+      var joke_id = $(event.currentTarget).closest('tr').data('joke-id');
+      BootstrapDialog.show({
+        title: 'delete joke',
+        message: 'Are you sure?',
+        buttons: [{
+            label: 'cancle',
+            cssClass: 'btn btn-default',
+            action: function(dialog) {
+              dialog.close();
+            }
+        }, {
+            label: 'delete',
+            cssClass: 'btn btn-primary',
+            action: function(dialog) {
+              $.ajax({
+                url: "/jokes/" + joke_id,
+                type: "DELETE",
+                dataType: "json",
+                success: function(resp){
+                  if (resp.return_code === 0) {
+                    location.reload();
+                  } else{
+                    console.error("delete joke fail!");
+                  }
+                },
+                error: function(){
+                  console.error("delete joke fail!");
+                }
+              });
+            }
+        }]
+      });
+    });
+
+    $(".search").on("click", function(event){
+      var content = $(".search_form input[name='content']").val();
+      $.ajax({
+        url: "/jokes/search",
+        type: "GET",
+        dataType: "script",
+        data: {
+          content: content
+        }
+        //,
+        // success: function(resp){
+        //   if (resp.return_code === 0) {
+        //     location.reload();
+        //   } else{
+        //     console.error("update joke fail!");
+        //   }
+        // },
+        // error: function(){
+        //   console.error("update joke fail!");
+        // }
+      });
+    });
+
+
+  });
+</script>

@@ -1,0 +1,31 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>content</th>
+      <th>point</th>
+      <th>tag</th>
+      <th>operations</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @jokes.empty? %>
+      <tr>
+        <td colspan="3">no joke</td>
+      </tr>
+    <% else %>
+      <% @jokes.each do |joke| %>
+        <tr data-joke-id=<%= joke[:id] %>>
+          <td class="content_td"><%= joke[:content] %></td>
+          <td><%= joke[:point] %></td>
+          <td><%= joke_tags(joke) %></td>
+          <td>
+            <button class="btn btn-primary edit_joke_btn">edit</button>
+            <button class="btn btn-primary delete_joke_btn">delete</button>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<%#= paginate @jokes, :remote => true %>
+<%= paginate @jokes %>

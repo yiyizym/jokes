@@ -1,0 +1,105 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>content</th>
+      <th>operations</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @tags.empty? %>
+      <tr>
+        <td colspan="3">no tag</td>
+      </tr>
+    <% else %>
+      <% @tags.each do |tag| %>
+        <tr data-tag-id=<%= tag[:id] %>>
+          <td class="tag_content" data-tag-content=<%= tag[:content] %>><%= tag[:content] %></td>
+          <td>
+            <button class="btn btn-primary edit_tag_btn">edit</button>
+            <button class="btn btn-primary delete_tag_btn">delete</button>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $(function(){
+    $(".edit_tag_btn").on("click", function(event){
+      var $tr = $(event.target).closest('tr');
+      var tag_id = $tr.data('tag-id');
+      var tag_content = $tr.find(".tag_content").data('tag-content');
+      BootstrapDialog.show({
+        title: 'edit tag',
+        message: '<input type="text" class="edit_tag" value="'+ tag_content +'" />',
+        buttons: [{
+            label: 'cancle',
+            cssClass: 'btn btn-default',
+            action: function(dialog) {
+              dialog.close();
+            }
+        }, {
+            label: 'confirm',
+            cssClass: 'btn btn-primary',
+            action: function(dialog) {
+              $.ajax({
+                url: "/tags/" + tag_id,
+                type: "PUT",
+                dataType: "json",
+                data: {
+                  content: $(".edit_tag").val(),
+                },
+                success: function(resp){
+                  if (resp.return_code === 0) {
+                    location.reload();
+                  } else{
+                    console.error("update tag fail!");
+                  }
+                },
+                error: function(){
+                  console.error("update tag fail!");
+                }
+              });
+            }
+        }]
+      });
+    });
+    
+    $(".delete_tag_btn").on("click", function(event){
+      var tag_id = $(event.target).closest('tr').data('tag-id');
+      BootstrapDialog.show({
+        title: 'delete tag',
+        message: 'Are you sure?',
+        buttons: [{
+            label: 'cancle',
+            cssClass: 'btn btn-default',
+            action: function(dialog) {
+              dialog.close();
+            }
+        }, {
+            label: 'delete',
+            cssClass: 'btn btn-primary',
+            action: function(dialog) {
+              $.ajax({
+                url: "/tags/" + tag_id,
+                type: "DELETE",
+                dataType: "json",
+                success: function(resp){
+                  if (resp.return_code === 0) {
+                    location.reload();
+                  } else{
+                    console.error("delete tag fail!");
+                  }
+                },
+                error: function(){
+                  console.error("delete tag fail!");
+                }
+              });
+            }
+        }]
+      });
+    });
+
+  });
+</script>

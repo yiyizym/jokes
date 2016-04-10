@@ -1,0 +1,26 @@
+.main_container {
+  margin-top: 100px;
+}
+
+.new_joke_container {
+  & > .row {
+    margin: 10px 0;
+  }
+}
+
+#joke_point {
+  display: inline-block;
+  width: 100px;
+}
+
+.tags_container {
+  & label {
+    margin-right: 10px;
+  }
+}
+
+.content_td {
+  width: 500px;
+  word-wrap: break-word;
+  word-break: break-word;
+}
