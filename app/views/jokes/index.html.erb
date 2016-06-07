@@ -14,6 +14,16 @@
       BootstrapDialog.show({
         title: 'edit joke',
         message: $('<div>').load('/jokes/'+ joke_id +'/edit'),
+        onshown: function(dialog){
+          dialog.$modalBody.find('form').on("keyup keypress", function(event){
+            var keyCode = event.keyCode || event.which;
+            if (keyCode === 13) {
+              event.preventDefault();
+              dialog.$modalFooter.find(".btn-primary").trigger('click');
+              return false;
+            }
+          });
+        },
         buttons: [{
             label: 'cancle',
             cssClass: 'btn btn-default',
@@ -35,13 +45,16 @@
                 },
                 success: function(resp){
                   if (resp.return_code === 0) {
-                    location.reload();
+                    reloadCurrentPage();
                   } else{
                     console.error("update joke fail!");
                   }
                 },
                 error: function(){
                   console.error("update joke fail!");
+                },
+                complete: function(){
+                  dialog.close();
                 }
               });
             }
@@ -70,13 +83,16 @@
                 dataType: "json",
                 success: function(resp){
                   if (resp.return_code === 0) {
-                    location.reload();
+                    reloadCurrentPage();
                   } else{
                     console.error("delete joke fail!");
                   }
                 },
                 error: function(){
                   console.error("delete joke fail!");
+                },
+                complete: function(){
+                  dialog.close();
                 }
               });
             }
@@ -86,25 +102,7 @@
 
     $(".search").on("click", function(event){
       var content = $(".search_form input[name='content']").val();
-      $.ajax({
-        url: "/jokes/search",
-        type: "GET",
-        dataType: "script",
-        data: {
-          content: content
-        }
-        //,
-        // success: function(resp){
-        //   if (resp.return_code === 0) {
-        //     location.reload();
-        //   } else{
-        //     console.error("update joke fail!");
-        //   }
-        // },
-        // error: function(){
-        //   console.error("update joke fail!");
-        // }
-      });
+      searchJokes({content: content});
     });
 
     $(".search_form").on("keyup keypress", function(event){
@@ -115,6 +113,24 @@
         return false;
       }
     });
+
+    function reloadCurrentPage(){
+      var currentPage = parseInt($('.pagination .page.current').text(),10);
+      var content = $(".search_form input[name='content']").val();
+      searchJokes({
+        page: currentPage,
+        content: content
+      });
+    }
+
+    function searchJokes(params){
+      $.ajax({
+        url: "/jokes/search",
+        type: "GET",
+        dataType: "script",
+        data: params
+      });
+    }
 
 
   });
