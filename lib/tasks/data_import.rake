@@ -17,4 +17,14 @@ namespace :data do
       end
     end
   end
+  task :import_json => :environment do
+    p "Importing file #{ENV['filename']}"
+    require 'json'
+    File.open Rails.root.join('lib', 'tasks', "#{ENV['filename']}"), "r" do |file|
+      data_array = JSON.parse(file.read)
+      data_array.each do |item|
+        Joke.create({content: item['content'], published: true}) if item['content'].present?
+      end
+    end
+  end
 end
