@@ -11,13 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180226010810) do
+ActiveRecord::Schema.define(version: 20180228004718) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "joke_categories", force: :cascade do |t|
+    t.integer "joke_id"
+    t.integer "category_id"
+  end
+
+  add_index "joke_categories", ["category_id"], name: "index_joke_categories_on_category_id"
+  add_index "joke_categories", ["joke_id"], name: "index_joke_categories_on_joke_id"
 
   create_table "joke_tags", force: :cascade do |t|
     t.integer  "joke_id"
@@ -34,14 +42,6 @@ ActiveRecord::Schema.define(version: 20180226010810) do
     t.boolean  "trash",      default: false
     t.boolean  "published",  default: false
   end
-
-  create_table "jokes_categories", force: :cascade do |t|
-    t.integer "joke_id"
-    t.integer "category_id"
-  end
-
-  add_index "jokes_categories", ["category_id"], name: "index_jokes_categories_on_category_id"
-  add_index "jokes_categories", ["joke_id"], name: "index_jokes_categories_on_joke_id"
 
   create_table "tags", force: :cascade do |t|
     t.string   "content"

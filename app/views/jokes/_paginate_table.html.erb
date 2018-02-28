@@ -3,6 +3,7 @@
     <tr>
       <th>content</th>
       <th>point</th>
+      <th>category</th>
       <th>tag</th>
       <th>operations</th>
     </tr>
@@ -17,6 +18,7 @@
         <tr data-joke-id=<%= joke[:id] %>>
           <td class="content_td"><%= joke[:content] %></td>
           <td><%= joke[:point] %></td>
+          <td><%= joke_categories(joke) %></td>
           <td><%= joke_tags(joke) %></td>
           <td>
             <button class="btn btn-primary edit_joke_btn">edit</button>

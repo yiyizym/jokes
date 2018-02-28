@@ -1,0 +1,105 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>content</th>
+      <th>operations</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @categories.empty? %>
+      <tr>
+        <td colspan="3">no category</td>
+      </tr>
+    <% else %>
+      <% @categories.each do |category| %>
+        <tr data-category-id=<%= category[:id] %>>
+          <td class="category_content" data-category-content=<%= category[:content] %>><%= category[:content] %></td>
+          <td>
+            <button class="btn btn-primary edit_category_btn">edit</button>
+            <button class="btn btn-primary delete_category_btn">delete</button>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+  $(function(){
+    $(".edit_category_btn").on("click", function(event){
+      var $tr = $(event.target).closest('tr');
+      var category_id = $tr.data('category-id');
+      var category_content = $tr.find(".category_content").data('category-content');
+      BootstrapDialog.show({
+        title: 'edit category',
+        message: '<input type="text" class="edit_category" value="'+ category_content +'" />',
+        buttons: [{
+            label: 'cancle',
+            cssClass: 'btn btn-default',
+            action: function(dialog) {
+              dialog.close();
+            }
+        }, {
+            label: 'confirm',
+            cssClass: 'btn btn-primary',
+            action: function(dialog) {
+              $.ajax({
+                url: "/categories/" + category_id,
+                type: "PUT",
+                dataType: "json",
+                data: {
+                  content: $(".edit_category").val(),
+                },
+                success: function(resp){
+                  if (resp.return_code === 0) {
+                    location.reload();
+                  } else{
+                    console.error("update category fail!");
+                  }
+                },
+                error: function(){
+                  console.error("update category fail!");
+                }
+              });
+            }
+        }]
+      });
+    });
+    
+    $(".delete_category_btn").on("click", function(event){
+      var category_id = $(event.target).closest('tr').data('category-id');
+      BootstrapDialog.show({
+        title: 'delete category',
+        message: 'Are you sure?',
+        buttons: [{
+            label: 'cancle',
+            cssClass: 'btn btn-default',
+            action: function(dialog) {
+              dialog.close();
+            }
+        }, {
+            label: 'delete',
+            cssClass: 'btn btn-primary',
+            action: function(dialog) {
+              $.ajax({
+                url: "/categories/" + category_id,
+                type: "DELETE",
+                dataType: "json",
+                success: function(resp){
+                  if (resp.return_code === 0) {
+                    location.reload();
+                  } else{
+                    console.error("delete category fail!");
+                  }
+                },
+                error: function(){
+                  console.error("delete category fail!");
+                }
+              });
+            }
+        }]
+      });
+    });
+
+  });
+</script>

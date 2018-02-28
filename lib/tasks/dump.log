@@ -1,0 +1,8 @@
+D, [2016-07-30T12:23:12.146913 #2630] DEBUG -- : fetching jokes where point greater than or equal 6 and published false
+
+D, [2016-07-30T12:23:12.634208 #2630] DEBUG -- : dump 43 jokes into file 201607301223.json
+
+D, [2016-07-30T12:23:12.660112 #2630] DEBUG -- : dump to file success 
+
+D, [2016-07-30T12:23:12.662957 #2630] DEBUG -- : update jokes' status to published
+

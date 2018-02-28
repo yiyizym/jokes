@@ -9,8 +9,15 @@
       <div class="col-xs-9"> <%= f.number_field :point, in: 1...10 %></div>
     </div>
     <div class="col-xs-12 row">
+      <span class="col-xs-2">categories:</span>
+      <div class="col-xs-8 categories_container"> <%= f.collection_check_boxes :category_ids, all_categories, :id, :content %></div>
+      <span  class="col-xs-1">
+        <button type="button" class="btn btn-primary add_category">add category</button>
+      </span>
+    </div>
+    <div class="col-xs-12 row">
       <span class="col-xs-2">tags:</span>
-      <div class="col-xs-8 tags_container"> <%= f.collection_check_boxes :tag_ids, Tag.all, :id, :content %></div>
+      <div class="col-xs-8 tags_container"> <%= f.collection_check_boxes :tag_ids, all_tags, :id, :content %></div>
       <span  class="col-xs-1">
         <button type="button" class="btn btn-primary add_tag">add tag</button>
       </span>
@@ -67,6 +74,58 @@
                 },
                 error: function(){
                   console.error("create new tag fail!");
+                }
+              });
+            }
+        }]
+      });
+    });
+
+    $(".add_category").on("click", function(){
+      BootstrapDialog.show({
+        title: 'add category',
+        message: '<input type="text" class="new_category" />',
+        buttons: [{
+            label: 'cancle',
+            cssClass: 'btn btn-default',
+            action: function(dialog) {
+              dialog.close();
+            }
+        }, {
+            label: 'confirm',
+            cssClass: 'btn btn-primary',
+            action: function(dialog) {
+              $.ajax({
+                url: "/categories",
+                type: "POST",
+                dataType: "json",
+                data: {
+                  content: $(".new_category").val()
+                },
+                success: function(resp){
+                  if (resp.return_code === 0) {
+                    var category_id = resp.id;
+                    var category_content = resp.content;
+                    var tpl = [
+                      '<input type="checkbox" value="',
+                      category_id,
+                      '" name="joke[category_ids][]" id="joke_category_ids_',
+                      category_id,
+                      '"><label for="joke_category_ids_',
+                      category_id,
+                      '">',
+                      category_content,
+                      '</label>'
+                    ].join("");
+                    $(".categories_container").prepend(tpl);
+                    dialog.close();
+                    // location.reload();
+                  } else{
+                    console.error("create new category fail!");
+                  }
+                },
+                error: function(){
+                  console.error("create new category fail!");
                 }
               });
             }
