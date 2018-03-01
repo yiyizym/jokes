@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180228004718) do
+ActiveRecord::Schema.define(version: 20180301003024) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "content"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20180228004718) do
     t.datetime "updated_at",                 null: false
     t.boolean  "trash",      default: false
     t.boolean  "published",  default: false
+    t.string   "keyword",    default: ""
   end
 
   create_table "tags", force: :cascade do |t|

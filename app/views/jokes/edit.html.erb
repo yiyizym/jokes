@@ -7,6 +7,9 @@
       <span class="col-xs-3">point:</span><span class="col-xs-9"> <%= f.number_field :point, in: 1...10 %></span>
     </div>
     <div class="col-xs-12 row">
+      <span class="col-xs-3">keyword:</span><span class="col-xs-9"> <%= f.text_field :keyword, placeholder: '空格分隔' %></span>
+    </div>
+    <div class="col-xs-12 row">
       <span class="col-xs-3">categories:</span><span class="col-xs-8"> <%= f.collection_check_boxes :category_ids, all_categories, :id, :content %></span><span  class="col-xs-1"></span>
     </div>
     <div class="col-xs-12 row">

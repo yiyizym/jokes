@@ -5,6 +5,7 @@
       <th>point</th>
       <th>category</th>
       <th>tag</th>
+      <th>keyword</th>
       <th>operations</th>
     </tr>
   </thead>
@@ -20,6 +21,7 @@
           <td><%= joke[:point] %></td>
           <td><%= joke_categories(joke) %></td>
           <td><%= joke_tags(joke) %></td>
+          <td><%= joke[:keyword] %></td>
           <td>
             <button class="btn btn-primary edit_joke_btn">edit</button>
             <button class="btn btn-primary delete_joke_btn">delete</button>
