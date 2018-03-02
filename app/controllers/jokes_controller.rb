@@ -1,7 +1,8 @@
 class JokesController < ApplicationController
   before_action :find_joke , only: [:edit, :update, :destroy]
   def index
-    @jokes = inner_search(false,nil,:desc,search_params[:page])
+    @jokes = Joke.search(search_params)
+    # @jokes = inner_search(false,nil,:desc,search_params[:page])
     respond_to do |format|
       format.html
       format.js { render :search }
@@ -17,7 +18,8 @@ class JokesController < ApplicationController
   end
 
   def search
-    @jokes = inner_search(search_params.fetch(:trash, false), search_params.fetch(:content, nil), search_params.fetch(:order, :desc))
+    @jokes = Joke.search(search_params)
+    # @jokes = inner_search(search_params.fetch(:trash, false), search_params.fetch(:content, nil), search_params.fetch(:order, :desc))
     respond_to do |format|
       format.js
     end
@@ -102,6 +104,6 @@ class JokesController < ApplicationController
     params.permit(:content, :point, :tag_ids => [])
   end
   def search_params
-    params.permit(:trash, :content, :order, :page)
+    params.permit(:trash, :content, :type, :order, :page)
   end
 end
