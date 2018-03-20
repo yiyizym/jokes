@@ -26,7 +26,7 @@
           dialog.$modalBody.find('#joke_point').focus().select();
           dialog.$modalBody.find('form').on("keyup keypress", function(event){
             var keyCode = event.keyCode || event.which;
-            if (keyCode === 13) {
+            if (keyCode === 13 && event.altKey) {
               event.preventDefault();
               dialog.$modalFooter.find(".btn-primary").trigger('click');
               return false;
@@ -50,7 +50,9 @@
                 data: {
                   content: $("#joke_content").val(),
                   point: $("#joke_point").val(),
-                  tag_ids: $(".edit_joke input:checkbox:checked").map(function(){return $(this).val();}).get()
+                  keyword: $("#joke_keyword").val(),
+                  category_ids: $(".edit_joke [name='joke[category_ids][]']:checked").map(function(){return $(this).val();}).get(),
+                  tag_ids: $(".edit_joke [name='joke[tag_ids][]']:checked").map(function(){return $(this).val();}).get()
                 },
                 success: function(resp){
                   if (resp.return_code === 0) {
@@ -120,7 +122,7 @@
 
     $(".search_form").on("keyup keypress", function(event){
       var keyCode = event.keyCode || event.which;
-      if (keyCode === 13) {
+      if (keyCode === 13 && event.altKey) {
         event.preventDefault();
         $(".search").trigger('click');
         return false;
@@ -130,9 +132,11 @@
     function reloadCurrentPage(){
       var currentPage = parseInt($('.pagination .page.current').text(),10);
       var content = $(".search_form input[name='content']").val();
+      var type = $(".search_form select[name='search_type']").val();
       searchJokes({
         page: currentPage,
-        content: content
+        content: content,
+        type: type
       });
     }
 

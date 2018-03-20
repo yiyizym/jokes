@@ -2,7 +2,6 @@ class JokesController < ApplicationController
   before_action :find_joke , only: [:edit, :update, :destroy]
   def index
     @jokes = Joke.search(search_params)
-    # @jokes = inner_search(false,nil,:desc,search_params[:page])
     respond_to do |format|
       format.html
       format.js { render :search }
@@ -19,7 +18,6 @@ class JokesController < ApplicationController
 
   def search
     @jokes = Joke.search(search_params)
-    # @jokes = inner_search(search_params.fetch(:trash, false), search_params.fetch(:content, nil), search_params.fetch(:order, :desc))
     respond_to do |format|
       format.js
     end
@@ -90,18 +88,14 @@ class JokesController < ApplicationController
 
   private
 
-  def inner_search(trash=false, content=nil, order=:desc, page=nil)
-    jokes = Joke.where("trash = ? AND content LIKE ?", trash,"%#{content}%").order(created_at: order).page(params[:page])
-  end
-
   def create_params
-    params.require(:joke).permit(:content, :point, :tag_ids => [])
+    params.require(:joke).permit(:content, :point, :keyword, :category_ids => [], :tag_ids => [])
   end
   def find_joke
     @joke = Joke.find(params[:id])
   end
   def update_params
-    params.permit(:content, :point, :tag_ids => [])
+    params.permit(:content, :point, :keyword, :category_ids => [], :tag_ids => [])
   end
   def search_params
     params.permit(:trash, :content, :type, :order, :page)

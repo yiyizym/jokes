@@ -6,3 +6,19 @@ D, [2016-07-30T12:23:12.660112 #2630] DEBUG -- : dump to file success
 
 D, [2016-07-30T12:23:12.662957 #2630] DEBUG -- : update jokes' status to published
 
+D, [2018-03-03T09:01:33.789104 #90518] DEBUG -- : fetching jokes where point greater than or equal 6 and published false
+
+D, [2018-03-03T09:01:33.990027 #90518] DEBUG -- : dump 93 jokes into file 201803030901.json
+
+D, [2018-03-03T09:01:34.015519 #90518] DEBUG -- : dump to file success 
+
+D, [2018-03-03T09:01:34.021179 #90518] DEBUG -- : update jokes' status to published
+
+D, [2018-03-03T10:30:19.135425 #28804] DEBUG -- : fetching jokes where point greater than or equal 6
+
+D, [2018-03-03T10:30:19.271894 #28804] DEBUG -- : dump 682 jokes into file 201803031030.json
+
+D, [2018-03-03T10:30:19.428344 #28804] DEBUG -- : dump to file success 
+
+D, [2018-03-05T08:52:33.648763 #21888] DEBUG -- : update jokes' status to published
+
